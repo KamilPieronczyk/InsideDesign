@@ -2,11 +2,12 @@
 //
 
 #include "pch.h"
-#include <iostream>
 
 int main()
 {
-    std::cout << "Hello World!\n"; 
+	Plan plan;
+	plan.run();
+	return 0;
 }
 
 // Uruchomienie programu: Ctrl + F5 lub menu Debugowanie > Uruchom bez debugowania
