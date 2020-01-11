@@ -15,6 +15,8 @@ public:
 	void setSize(int width, int height);
 	void setPosition(int x, int y) { this->shape.setPosition((float)x, (float)y); };
 	bool moveOnMouseHover(sf::Event & event);
+	bool onClick(sf::Event & event);
+	void onClick(sf::Event & event, std::function<void(void)> callback);
 	void inline draw() { (*window).draw(shape); }
 };
 

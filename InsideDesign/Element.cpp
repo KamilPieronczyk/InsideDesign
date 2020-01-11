@@ -14,7 +14,10 @@ Element::~Element()
 
 void Element::setTexture(std::string filename)
 {
-	shape.setFillColor(sf::Color::Red);
+	if (!image.loadFromFile(filename))
+		shape.setFillColor(sf::Color::Red);
+	else
+		shape.setTexture(&image);
 }
 
 void Element::setSize(int width, int height)
@@ -42,4 +45,33 @@ bool Element::moveOnMouseHover(sf::Event & event)
 		this->isMouseHover = false;
 	}
 	return false;
+}
+
+bool Element::onClick(sf::Event & event)
+{
+	if (event.type == sf::Event::EventType::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+		if (
+			sf::Mouse::getPosition(*window).x - shape.getPosition().x < this->shape.getSize().x
+			&& sf::Mouse::getPosition(*window).x - shape.getPosition().x > 0
+			&& sf::Mouse::getPosition(*window).y - shape.getPosition().y < this->shape.getSize().y
+			&& sf::Mouse::getPosition(*window).y - shape.getPosition().y > 0
+			) {
+			return true;
+		}
+	}
+	return false;
+}
+
+void Element::onClick(sf::Event & event, std::function<void(void)> callback)
+{
+	if (event.type == sf::Event::EventType::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+		if (
+			sf::Mouse::getPosition(*window).x - shape.getPosition().x < this->shape.getSize().x
+			&& sf::Mouse::getPosition(*window).x - shape.getPosition().x > 0
+			&& sf::Mouse::getPosition(*window).y - shape.getPosition().y < this->shape.getSize().y
+			&& sf::Mouse::getPosition(*window).y - shape.getPosition().y > 0
+			) {
+			callback();
+		}
+	}
 }

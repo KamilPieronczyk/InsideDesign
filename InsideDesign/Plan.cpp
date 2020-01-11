@@ -7,8 +7,6 @@ void Plan::run()
 	sf::err().rdbuf(NULL);
 	sf::Event event;
 
-	Table table(window);
-
 	while (window.isOpen())
 	{
 		window.clear();
@@ -18,11 +16,46 @@ void Plan::run()
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
-			if(table.moveOnMouseHover(event)) break;
+			if (moveElementOnMouseHover(event)) break;
+			menu.chair.onClick(event, [this] {addElement(Plan::CHAIR); });
+			menu.table.onClick(event, [this] {addElement(Plan::TABLE); });
+			menu.plant.onClick(event, [this] {addElement(Plan::PLANT); });
 		}
-		table.draw();
+		render();
 		window.display();
 	}
+}
+
+void Plan::addElement(Plan::Types type)
+{
+	std::cout << "added" << std::endl;
+	switch (type)
+	{
+	case Plan::Types::CHAIR :
+		elements.push_back(new Chair(window));
+		break;
+	case Plan::Types::TABLE:
+		elements.push_back(new Table(window));
+		break;
+	case Plan::Types::PLANT:
+		elements.push_back(new Plant(window));
+		break;
+	}
+}
+
+void Plan::render()
+{
+	for (auto el : elements) {
+		el->draw();
+	}
+}
+
+bool Plan::moveElementOnMouseHover(sf::Event & event)
+{
+	for (auto el : elements) {
+		if(el->moveOnMouseHover(event)) return true;
+	}
+	return false;
 }
 
 Plan::Plan()

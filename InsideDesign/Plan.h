@@ -7,8 +7,12 @@ class Plan
 	sf::RenderWindow window = { sf::VideoMode(1280, 800), "InsideDesign" };
 	Menu menu = {window};
 public:
+	enum Types {CHAIR, TABLE, PLANT};
 	Plan();
 	void run();
+	void addElement(Plan::Types type);
+	void render();
+	bool moveElementOnMouseHover(sf::Event & event);
 	~Plan();
 };
 
