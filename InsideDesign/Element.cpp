@@ -20,19 +20,42 @@ void Element::setTexture(std::string filename)
 		shape.setTexture(&image);
 }
 
+void Element::loadTextures(std::vector<std::string> filenames)
+{
+	for (auto file : filenames) {
+		images.push_back(sf::Texture());
+		images.back().loadFromFile(file);
+	}
+}
+
+void Element::nextTexture()
+{
+	shape.setTexture(&images[textureIndex++ % images.size()]);
+}
+
+void Element::setTextureByIndex(int i)
+{
+	shape.setTexture(&images[i % images.size()]);
+}
+
 void Element::setSize(int width, int height)
 {
 	this->shape.setSize(sf::Vector2f(width, height));
+}
+
+void Element::rotate()
+{
+	shape.rotate(90);
 }
 
 bool Element::moveOnMouseHover(sf::Event & event)
 {
 	if (event.type == sf::Event::EventType::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
 		if (
-			sf::Mouse::getPosition(*window).x - shape.getPosition().x < this->shape.getSize().x
-			&& sf::Mouse::getPosition(*window).x - shape.getPosition().x > 0
-			&& sf::Mouse::getPosition(*window).y - shape.getPosition().y < this->shape.getSize().y
-			&& sf::Mouse::getPosition(*window).y - shape.getPosition().y > 0
+			this->shape.getOrigin().x + sf::Mouse::getPosition(*window).x - shape.getPosition().x < this->shape.getSize().x
+			&& this->shape.getOrigin().x + sf::Mouse::getPosition(*window).x - shape.getPosition().x > 0
+			&& this->shape.getOrigin().y + sf::Mouse::getPosition(*window).y - shape.getPosition().y < this->shape.getSize().y
+			&& this->shape.getOrigin().y + sf::Mouse::getPosition(*window).y - shape.getPosition().y > 0
 			) {
 			this->isMouseHover = true;
 		}
@@ -51,10 +74,10 @@ bool Element::onClick(sf::Event & event)
 {
 	if (event.type == sf::Event::EventType::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
 		if (
-			sf::Mouse::getPosition(*window).x - shape.getPosition().x < this->shape.getSize().x
-			&& sf::Mouse::getPosition(*window).x - shape.getPosition().x > 0
-			&& sf::Mouse::getPosition(*window).y - shape.getPosition().y < this->shape.getSize().y
-			&& sf::Mouse::getPosition(*window).y - shape.getPosition().y > 0
+			this->shape.getOrigin().x + sf::Mouse::getPosition(*window).x - shape.getPosition().x < this->shape.getSize().x
+			&& this->shape.getOrigin().x + sf::Mouse::getPosition(*window).x - shape.getPosition().x > 0
+			&& this->shape.getOrigin().y + sf::Mouse::getPosition(*window).y - shape.getPosition().y < this->shape.getSize().y
+			&& this->shape.getOrigin().y + sf::Mouse::getPosition(*window).y - shape.getPosition().y > 0
 			) {
 			return true;
 		}
@@ -66,12 +89,26 @@ void Element::onClick(sf::Event & event, std::function<void(void)> callback)
 {
 	if (event.type == sf::Event::EventType::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
 		if (
-			sf::Mouse::getPosition(*window).x - shape.getPosition().x < this->shape.getSize().x
-			&& sf::Mouse::getPosition(*window).x - shape.getPosition().x > 0
-			&& sf::Mouse::getPosition(*window).y - shape.getPosition().y < this->shape.getSize().y
-			&& sf::Mouse::getPosition(*window).y - shape.getPosition().y > 0
+			this->shape.getOrigin().x + sf::Mouse::getPosition(*window).x - shape.getPosition().x < this->shape.getSize().x
+			&& this->shape.getOrigin().x + sf::Mouse::getPosition(*window).x - shape.getPosition().x > 0
+			&& this->shape.getOrigin().y + sf::Mouse::getPosition(*window).y - shape.getPosition().y < this->shape.getSize().y
+			&& this->shape.getOrigin().y + sf::Mouse::getPosition(*window).y - shape.getPosition().y > 0
 			) {
 			callback();
+		}
+	}
+}
+
+void Element::onRightClick(sf::Event & event, std::function<void(void)> callback)
+{
+	if (event.type == sf::Event::EventType::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right) {
+		if (
+			this->shape.getOrigin().x + sf::Mouse::getPosition(*window).x - shape.getPosition().x < this->shape.getSize().x
+			&& this->shape.getOrigin().x + sf::Mouse::getPosition(*window).x - shape.getPosition().x > 0
+			&& this->shape.getOrigin().y + sf::Mouse::getPosition(*window).y - shape.getPosition().y < this->shape.getSize().y
+			&& this->shape.getOrigin().y + sf::Mouse::getPosition(*window).y - shape.getPosition().y > 0
+			) {
+				callback();
 		}
 	}
 }
@@ -79,10 +116,10 @@ void Element::onClick(sf::Event & event, std::function<void(void)> callback)
 void Element::OnMouseHoverBorder()
 {
 	if (
-		sf::Mouse::getPosition(*window).x - shape.getPosition().x < this->shape.getSize().x
-		&& sf::Mouse::getPosition(*window).x - shape.getPosition().x > 0
-		&& sf::Mouse::getPosition(*window).y - shape.getPosition().y < this->shape.getSize().y
-		&& sf::Mouse::getPosition(*window).y - shape.getPosition().y > 0
+		this->shape.getOrigin().x + sf::Mouse::getPosition(*window).x - shape.getPosition().x < this->shape.getSize().x
+		&& this->shape.getOrigin().x + sf::Mouse::getPosition(*window).x - shape.getPosition().x > 0
+		&& this->shape.getOrigin().y + sf::Mouse::getPosition(*window).y - shape.getPosition().y < this->shape.getSize().y
+		&& this->shape.getOrigin().y + sf::Mouse::getPosition(*window).y - shape.getPosition().y > 0
 		) {
 		shape.setOutlineColor(sf::Color::Blue);
 		shape.setOutlineThickness(5);

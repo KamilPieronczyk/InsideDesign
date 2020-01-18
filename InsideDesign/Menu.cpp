@@ -6,9 +6,9 @@ Menu::Menu(sf::RenderWindow & window) :window(&window)
 	chair.window = &window;
 	table.window = &window;
 	plant.window = &window;
-	chair.setPosition(1000, 100);
-	table.setPosition(1000, 240);
-	plant.setPosition(1000, 480);
+	chair.setPosition(1130, 100);
+	table.setPosition(1130, 300);
+	plant.setPosition(1130, 480);
 }
 /*
 void Menu::onClick(sf::Event & event, std::function<void(Plan::Types type)> callback)

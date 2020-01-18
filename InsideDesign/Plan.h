@@ -10,9 +10,10 @@ public:
 	enum Types {CHAIR, TABLE, PLANT};
 	Plan();
 	void run();
-	void addElement(Plan::Types type);
+	void addElement(Plan::Types type, int index = 0);
 	void render();
 	bool moveElementOnMouseHover(sf::Event & event);
+	void onRightClick(sf::Event & event);
 	void ElementOnMouseHoverBorder();
 	~Plan();
 };
