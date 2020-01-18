@@ -17,6 +17,7 @@ void Plan::run()
 			if (event.type == sf::Event::Closed)
 				window.close();
 			if (moveElementOnMouseHover(event)) break;
+			ElementOnMouseHoverBorder();
 			menu.chair.onClick(event, [this] {addElement(Plan::CHAIR); });
 			menu.table.onClick(event, [this] {addElement(Plan::TABLE); });
 			menu.plant.onClick(event, [this] {addElement(Plan::PLANT); });
@@ -56,6 +57,13 @@ bool Plan::moveElementOnMouseHover(sf::Event & event)
 		if(el->moveOnMouseHover(event)) return true;
 	}
 	return false;
+}
+
+void Plan::ElementOnMouseHoverBorder()
+{
+	for (auto el : elements) {
+		el->OnMouseHoverBorder();
+	}
 }
 
 Plan::Plan()

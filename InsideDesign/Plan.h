@@ -13,6 +13,7 @@ public:
 	void addElement(Plan::Types type);
 	void render();
 	bool moveElementOnMouseHover(sf::Event & event);
+	void ElementOnMouseHoverBorder();
 	~Plan();
 };
 

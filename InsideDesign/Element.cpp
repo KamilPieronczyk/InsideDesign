@@ -75,3 +75,19 @@ void Element::onClick(sf::Event & event, std::function<void(void)> callback)
 		}
 	}
 }
+
+void Element::OnMouseHoverBorder()
+{
+	if (
+		sf::Mouse::getPosition(*window).x - shape.getPosition().x < this->shape.getSize().x
+		&& sf::Mouse::getPosition(*window).x - shape.getPosition().x > 0
+		&& sf::Mouse::getPosition(*window).y - shape.getPosition().y < this->shape.getSize().y
+		&& sf::Mouse::getPosition(*window).y - shape.getPosition().y > 0
+		) {
+		shape.setOutlineColor(sf::Color::Blue);
+		shape.setOutlineThickness(5);
+	}
+	else {
+		shape.setOutlineThickness(0);
+	}
+}
