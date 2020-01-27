@@ -6,7 +6,6 @@ void Plan::run()
 {
 	sf::err().rdbuf(NULL);
 	sf::Event event;
-
 	while (window.isOpen())
 	{
 		window.clear();
@@ -17,14 +16,16 @@ void Plan::run()
 			if (event.type == sf::Event::Closed)
 				window.close();
 			if (moveElementOnMouseHover(event)) break;
-			ElementOnMouseHoverBorder();
 			onRightClick(event);
+			ElementOnMouseHoverBorder();
+			activeElement(event);
 			menu.chair.onClick(event, [this] {addElement(Plan::CHAIR, menu.chair.textureIndex); });
-			menu.table.onClick(event, [this] {addElement(Plan::TABLE); });
+			menu.table.onClick(event, [this] {addElement(Plan::TABLE, menu.table.textureIndex); });
 			menu.plant.onClick(event, [this] {addElement(Plan::PLANT, menu.plant.textureIndex); });
 			menu.chair.onRightClick(event, [this] {menu.chair.nextTexture(); });
-			menu.table.onRightClick(event, [this] {std::cout << "table" << std::endl; });
-			menu.plant.onRightClick(event, [this] {menu.table.nextTexture(); });
+			menu.table.onRightClick(event, [this] {menu.table.nextTexture(); });
+			menu.plant.onRightClick(event, [this] {menu.plant.nextTexture(); });
+			DeleteActive(event);
 		}
 		render();
 		window.display();
@@ -33,7 +34,6 @@ void Plan::run()
 
 void Plan::addElement(Plan::Types type, int index)
 {
-	std::cout << "added" << std::endl;
 	switch (type)
 	{
 	case Plan::Types::CHAIR :
@@ -43,6 +43,7 @@ void Plan::addElement(Plan::Types type, int index)
 		break;
 	case Plan::Types::TABLE:
 		elements.push_back(new Table(window));
+		elements.back()->setTextureByIndex(--index);
 		elements.back()->setPosition(150, 100);
 		break;
 	case Plan::Types::PLANT:
@@ -75,9 +76,52 @@ void Plan::onRightClick(sf::Event & event)
 	}
 }
 
-void Plan::ElementOnMouseHoverBorder()
+void Plan::activeElement(sf::Event & event)
 {
 	for (auto el : elements) {
+		el->onFastClick(event, [this, el] {			
+			if (activedElement) {
+				activedElement->shape.setOutlineThickness(0);
+				activedElement->shape.setOutlineColor(sf::Color::Blue);
+			}
+			if (activedElement == el) {
+				activedElement = nullptr;
+			} else if (el != activedElement ) {			
+				activedElement = el;
+			}
+		});
+	}
+	if (activedElement) {
+		activedElement->shape.setOutlineColor(sf::Color::Green);
+		activedElement->shape.setOutlineThickness(5);
+	}
+	if (event.key.code == sf::Keyboard::Add && activedElement) {
+		activedElement->shape.setSize(sf::Vector2f(activedElement->shape.getSize().x + 5, activedElement->shape.getSize().y + 5));
+		activedElement->shape.setOrigin(sf::Vector2f(activedElement->shape.getOrigin().x + 2.5, activedElement->shape.getOrigin().y + 2.5));
+	}
+	if (event.key.code == sf::Keyboard::Subtract && activedElement) {
+		activedElement->shape.setSize(sf::Vector2f(activedElement->shape.getSize().x - 5, activedElement->shape.getSize().y - 5));
+		activedElement->shape.setOrigin(sf::Vector2f(activedElement->shape.getOrigin().x - 2.5, activedElement->shape.getOrigin().y - 2.5));
+	}
+}
+
+void Plan::DeleteActive(sf::Event & event)
+{
+	if (event.key.code == sf::Keyboard::Delete && activedElement) {
+		int i = 0;
+		for (auto el : elements) {
+			if (el == activedElement) {
+				elements.erase(elements.begin() + i);
+				break;
+			}
+			i++;
+		}
+	}
+}
+
+void Plan::ElementOnMouseHoverBorder()
+{
+	for (auto el : elements) {		
 		el->OnMouseHoverBorder();
 	}
 }

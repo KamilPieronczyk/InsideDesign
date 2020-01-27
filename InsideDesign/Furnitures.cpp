@@ -4,7 +4,7 @@
 Chair::Chair(sf::RenderWindow & window)
 {
 	this->window = &window;
-	loadTextures({ "chair.png","chair-b.png" });
+	loadTextures({ "chair-g.png","chair-b.png","chair-p.png" ,"chair-pu.png","chair-y.png" });
 	nextTexture();
 	//setTexture("chair.png");
 	setSize(100, 100);
@@ -24,7 +24,8 @@ Plant::Plant(sf::RenderWindow & window)
 Table::Table(sf::RenderWindow & window)
 {
 	this->window = &window;
-	setTexture("");
+	loadTextures({ "table-1.png","table-2.png" ,"table-3.png" });
+	nextTexture();
 	setSize(300, 200);
 	this->shape.setOrigin(150, 100);
 

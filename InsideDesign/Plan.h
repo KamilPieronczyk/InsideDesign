@@ -6,6 +6,7 @@ class Plan
 	std::vector<Element*> elements;
 	sf::RenderWindow window = { sf::VideoMode(1280, 800), "InsideDesign" };
 	Menu menu = {window};
+	Element * activedElement = nullptr;
 public:
 	enum Types {CHAIR, TABLE, PLANT};
 	Plan();
@@ -14,6 +15,8 @@ public:
 	void render();
 	bool moveElementOnMouseHover(sf::Event & event);
 	void onRightClick(sf::Event & event);
+	void activeElement(sf::Event & event);
+	void DeleteActive(sf::Event & event);
 	void ElementOnMouseHoverBorder();
 	~Plan();
 };
